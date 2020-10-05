@@ -2,10 +2,6 @@ const {validationResult} = require("express-validator")
 const Blog = require("../models/blog")
 
 exports.createBlog = (req, res, next) => {
-    const title = req.body.title;
-    const image = req.body.image;
-    const text = req.body.text;
-
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         const err = new Error("Invalid input value")
@@ -14,6 +10,16 @@ exports.createBlog = (req, res, next) => {
         throw err
         // return res.status(400).json({ errors: errors.array() });
     }
+
+    if (!req.file) {
+        const err = new Error("Image must be uploaded")
+        err.status = 422
+        throw err
+    }
+
+    const title = req.body.title;
+    const image = req.file.path;
+    const text = req.body.text;
 
     const posting = new Blog({
         title : title,
