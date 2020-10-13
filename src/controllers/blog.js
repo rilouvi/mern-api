@@ -45,3 +45,44 @@ exports.createBlog = (req, res, next) => {
         console.log("err : ", err)
     })
 }
+
+exports.getAllBlog = (req, res, next) => {
+    Blog.find()
+    .then(result => {
+        const output = {
+            message : "Data Blog Success",
+            data : result
+        }
+    
+        res.status(201).json(output);
+        next()
+    })
+    .catch(err => {
+        console.log("err : ", err)
+        next(err)
+    })
+}
+
+exports.getBlogById = (req, res, next) => {
+    const id = req.params.id
+    Blog.findById(id)
+    .then(result => {
+        if (!result) {
+            const err = new Error("Data Not Found")
+            err.status = 404
+            err.data = errors.array()
+            throw err
+        }
+        const output = {
+            message : "Data Blog Success",
+            data : result
+        }
+    
+        res.status(201).json(output);
+        next()
+    })
+    .catch(err => {
+        console.log("err : ", err)
+        next(err)
+    })
+}

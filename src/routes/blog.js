@@ -9,4 +9,7 @@ router.post("/post", [
     body("text").isLength({min:25}).withMessage("Text require mininal character."),
 ], blogController.createBlog);
 
+router.get("/posts", blogController.getAllBlog)
+router.get("/post/:id", blogController.getBlogById)
+
 module.exports = router;
